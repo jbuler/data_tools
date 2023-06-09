@@ -57,7 +57,7 @@ rm(list=ls())
 working.directory <- getwd()
 
 # Directory for Output data - Provide/path/where/you/want/output/data/to/be/stored/
-outpath <- "G:/Shared drives/aplab/research_projects/DE_quail/data/"
+outpath <- "G:/Shared drives/aplab/research_projects (1)/DE_quail/data/"
 
 
 # Bring in functions 
@@ -68,6 +68,7 @@ source("Functions_CTT.Network.R")
 tags <- read.csv(paste0(outpath,"Tags.csv"), header = T) 
 str(tags)  # check that data imported properly
 nodes <- read.csv(paste0(outpath,"Nodes.csv"), header = T)
+nodes$NodeId <- toupper(nodes$NodeId)
 str(nodes) # check that data imported properly
 
 
@@ -98,12 +99,12 @@ str(nodes) # check that data imported properly
 
 
 # Variables to define for function - replace values below with user specified values -
-INFILE <- "G:/Shared drives/aplab/research_projects/DE_quail/data/xx"
+INFILE <- "G:/Shared drives/aplab/research_projects (1)/DE_quail/data/Cedar Swamp WMA/"
 NODE.VERSION <- 2
-RADIOID <- c(1,2)
-TIMEZONE <- "NEWYORK" 
+RADIOID <- c(1,2,3,4,5)
+TIMEZONE <- "US/Eastern" 
 START <- "2023-05-31"
-END <- "2023-06-02"
+END <- "2023-06-09"
 
 
 # Function to import raw beep data
