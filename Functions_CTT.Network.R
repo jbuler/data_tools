@@ -11,7 +11,7 @@
 ####### Function to import raw beep data and format ##########
 
 # Function to import raw data for a particular date range
-import.beeps <- function(INFILE, NODE.VERSION, RADIOID, TIMEZONE, START, END) {
+import.beeps <- function(INFILE, NODE.VERSION, RADIOID, TIMEZONE, START, END, TAGLIST) {
   # set working directory where files can be found
   setwd(INFILE)
   
@@ -24,7 +24,7 @@ import.beeps <- function(INFILE, NODE.VERSION, RADIOID, TIMEZONE, START, END) {
   # Get dates from each file in the list 
   # file name starts with folder name of sensor station, then raw folder name, then file name (e.g. E8D5CC231B00/raw/CTT-E8D5CC231B00-raw-data.2020-06-25_061624.csv.gz)
   # so date is starts at 44th element and ends at 53
-  list_dates <- as.Date(substr(beep_files, 44,53), format = "%Y-%m-%d")
+  list_dates <- as.Date(substr(basename(beep_files), 27,45), format = "%Y-%m-%d")
   
   #Define start and end date to select from files
   start_range <- as.Date(START, format = "%Y-%m-%d")
@@ -56,7 +56,14 @@ import.beeps <- function(INFILE, NODE.VERSION, RADIOID, TIMEZONE, START, END) {
   beep_data <- lapply(beep_data, transform, NodeId = toupper(NodeId))
   
   # Keep only rows with TagId values in lookup table 
-  beep_data <- lapply(beep_data, function(x) x[x$TagId %in% tags$TagId,])
+  if(TAGLIST==TRUE){
+    beep_data <- lapply(beep_data, function(x) x[x$TagId %in% tags$TagId,])
+    }
+  
+  # Keep tags that have been validated if no lookup table is provided
+  if(TAGLIST==FALSE){
+    beep_data <- lapply(beep_data, function(x) x[x$Validated==1,])
+    }
   
   # count number of records removed
   count.ghosts <- count.import - sum(sapply(beep_data,nrow))
